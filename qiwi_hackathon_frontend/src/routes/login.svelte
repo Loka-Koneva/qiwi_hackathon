@@ -7,7 +7,7 @@
     export let api_url;
     import { goto } from '$app/navigation';
     import { Card, Button, FormField, TextField } from 'attractions'
-    import { browserGet, browserSet } from "$lib/utils.js"
+    import { browserGet, browserSet } from "src/libutils/utils.js"
     let email = ''
     let password = ''
     let errors = null;
