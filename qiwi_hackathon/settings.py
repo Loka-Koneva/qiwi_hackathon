@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -50,10 +51,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware'
     # 'rest_framework_simplejwt.authentication.JWTAuthentication',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:3000',
+)
 
 ROOT_URLCONF = 'qiwi_hackathon.urls'
 
