@@ -29,11 +29,12 @@ class LoginAPIView(APIView):
     def post(self, request: Request) -> Response:
         """Return user after login."""
 
-        user = User.objects.get(email=request.data.get('username'))
+        user = User.objects.get(username=request.data.get('username'))
         if not user:
             print("Пользователь не найден")
             return Response("Пользователь не найден", status=status.HTTP_400_BAD_REQUEST)
-        serializer = self.serializer_class(data=user)
+        serializer = LoginSerializer(data=dict(username=request.data.get('username'),
+                                               password=request.data.get('password')))
         if not serializer.is_valid():
             print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

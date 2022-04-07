@@ -20,9 +20,9 @@ class RegistrationSerializer(serializers.ModelSerializer[User]):
 
 
 class LoginSerializer(serializers.ModelSerializer[User]):
-    email = serializers.CharField(max_length=255)
-    username = serializers.CharField(max_length=255, read_only=True)
-    password = serializers.CharField(max_length=128, write_only=True)
+    # email = serializers.CharField(max_length=255)
+    username = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=128)
 
     tokens = serializers.SerializerMethodField()
 
@@ -34,19 +34,19 @@ class LoginSerializer(serializers.ModelSerializer[User]):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'tokens', 'full_name']
+        fields = ['email', 'username', 'password', 'tokens']
 
     def validate(self, data):  # type: ignore
         """Validate and return user login."""
-        email = data.get('email', None)
-        password = data.get('password', None)
-        if email is None:
+        username = data['username']
+        password = data['password']
+        if username is None:
             raise serializers.ValidationError('Введите e-mail для авторизации')
 
         if password is None:
             raise serializers.ValidationError('Введите логин для авторизации')
 
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is None:
             raise serializers.ValidationError('Пользователя с таким e-mail и паролем не существует')
