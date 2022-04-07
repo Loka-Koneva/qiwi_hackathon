@@ -3,12 +3,14 @@ from decimal import Decimal
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 STATUS = [
     ("0", "0"),
     ("1", "1")
 ]
+
 
 class UIDMixin(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, blank=True, verbose_name='UID')
@@ -38,6 +40,11 @@ class Company(UIDMixin):
 class User(AbstractUser):
     company = models.ForeignKey("Company", verbose_name="Обслуживающая организация",
                                 on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {"refresh": str(refresh), "access": str(refresh.access_token)}
 
 
 class ServiceRequest(UIDMixin):
