@@ -1,6 +1,5 @@
 import adapter from '@sveltejs/adapter-auto';
 import preprocess from 'svelte-preprocess';
-import autoPreprocess from 'svelte-preprocess'
 import makeAttractionsImporter from 'attractions/importer.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,9 +12,6 @@ configDotenv();
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: [
-		autoPreprocess({
-			replace: [['process.env.BASE_API_URL', JSON.stringify(process.env.BASE_API_URL)]],
-		}),
 		preprocess({
 			scss: {
 				importer: makeAttractionsImporter({
@@ -23,6 +19,7 @@ const config = {
 				}),
 				includePaths: [path.join(__dirname, './static/css')],
 			},
+			replace: [['process.env.BASE_API_URL', JSON.stringify(process.env.BASE_API_URL)]],
 		})
 	],
 	kit: {

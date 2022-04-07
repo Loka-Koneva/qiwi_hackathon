@@ -5,7 +5,6 @@
 </script>
 <script>
     export let api_url;
-    import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications'
     import { goto } from '$app/navigation';
     import { Card, Button, FormField, TextField } from 'attractions'
     import { browserGet, browserSet } from "$lib/utils.js"
@@ -13,8 +12,7 @@
     let password = ''
     let errors = null;
     async function submit () {
-        notifier.danger('Не удалось войти, проверьте логин и пароль', 3000)
-        const response = await fetch(`${api_url}/account/login`, { 
+        const response = await fetch(`${api_url}/api/login/`, { 
                 method: 'POST',
                 mode: 'cors',
                 credentials: 'same-origin',
@@ -27,30 +25,27 @@
                 })
             }
         )
-
         if(response.status == 201) {
             let json = await response.json()
             browserSet('refreshToken', json.user.tokens.refresh)
             await goto('/')
         } else {
-            notifier.danger('Не удалось войти, проверьте логин и пароль', 3000)
         }
     }
 </script>
 
-<NotificationDisplay />
 <div class="login-card">
     <Card>
-        <form on:submit|preventDefault={submit}>
+        <!-- <form on:submit|preventDefault={submit}> -->
             <FormField name="e-mail" help="Введите e-mail" required>
-                <TextField type="email" bind:value={email} />
+                <TextField type="text" bind:value={email} />
             </FormField>
     
             <FormField name="Пароль" help="Введите пароль" required>
                 <TextField type="password" bind:value={password}/>
             </FormField>
-            <Button filled type="submit" danger>Войти</Button>
-        </form>
+            <Button filled on:click={submit} danger>Войти</Button>
+        <!-- </form> -->
     </Card>    
 </div>
 
