@@ -26,6 +26,7 @@ class Service(UIDMixin):
                                max_digits=8, decimal_places=2)
     company = models.ForeignKey("Company", on_delete=models.SET_NULL,
                                 verbose_name="Организация", null=True, blank=True)
+    icon = models.CharField(max_length=150, verbose_name="Название иконки в статике", null=True, blank=True)
 
 
 class Payment(UIDMixin):
