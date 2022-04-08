@@ -61,20 +61,19 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class ServicesAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = ServicesSerializer
 
-    def get(self, request: Request) -> Response:
+    def get(self, request: Request, ) -> Response:
         user = User.objects.filter(uid=request.get('uid'))[0]
         services = Service.objects.filter(company_id=user.company)
         serializer = self.serializer_class(services, many=True)
         return Response({"services": serializer.data})
-        pass
 
 
 class ServicesHistoryAPIView(APIView):
-    def get(self, request: Request) -> Response:
-        # articles = Article.objects.all()
-        # serializer = ArticleSerializer(articles, many=True)
-        # return Response({"articles": serializer.data})
-        pass
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ServicesSerializer
 
+    def get(self, request: Request) -> Response:
+        pass

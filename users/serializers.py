@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import exceptions, serializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
-from .models import User, Service
+from .models import User, Service, ServiceRequest
 
 
 class RegistrationSerializer(serializers.ModelSerializer[User]):
@@ -93,3 +93,10 @@ class ServicesSerializer(serializers.Serializer[Service]):
     class Meta:
         model = Service
         fields = ('uid', 'name', 'cost', 'company')
+
+
+class HistoryServicesSerializer(serializers.Serializer[ServiceRequest]):
+
+    class Meta:
+        model = ServiceRequest
+        fields = ('uid')
