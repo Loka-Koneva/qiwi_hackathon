@@ -1,47 +1,26 @@
 <script context="module">
     import { getCurrentUser } from "../utils/index.js"
     import { goto } from "$app/navigation";
+    import { page } from "$app/stores"
     export async function load() {
         const api_url = process.env.BASE_API_URL
+        // const id = page.url.searchParams('email')
         const user_response = await getCurrentUser(`${api_url}/api/token/refresh/`, `${api_url}/api/user/`)
         if(!user_response.error && user_response.data.id) {
-            const services_response = await fetch(`${api_url}/api/services/`, {
-                method: 'GET',
-                mode: 'cors',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${user_response.data.tokens.access}`
-                }
-            })
-            let services = [{
-                uid: '9940dbdc-fa90-4ab9-b2c6-0912f5d48b95',
-                name: 'Поверка счетчиков ХВС',
-                cost: 600,
-                icon: 'counter1.svg'
-            }]
-            // let services = []
-            // if(services_response.status == 200) {
-            //     const json = await services_response.json() 
-            //     debugger;
-            //     services = json.services
-            // }
-            return {props: {user: user_response.data, services: services, api_url: api_url}}
+            return {props: {user: user_response.data, api_url: api_url}}
         } else {
-            return {props: {user: {}, services: [], api_url: api_url}}
+            return {props: {user: {}, api_url: api_url}}
         }
         
     }
 </script>
 
 <script>
-    export let user, api_url, services;
-    import { Button } from "attractions"
-    import Information from "../components/Information.svelte"
-    import Catalog from "../components/Catalog.svelte"
+    export let user, api_url
+    import { Button } from 'attractions'
     import { browserGet } from "../utils/index.js";
     function login() {
-        goto('/login');
+        // goto('/login');
     }
     async function logout() {
         const response = await fetch(`${api_url}/api/logout/`, {
@@ -64,8 +43,6 @@
     }
 </script>
 
-<!-- markup (zero or more items) goes here -->
-
 <header class="index-header">
     <h1 class="header-text">Платные услуги</h1>
     {#if !user.id}
@@ -77,20 +54,10 @@
             <Button danger filled on:click={logout}>Выйти</Button>
         </div>
     {/if}
-    <img class="index-header-image" src="./index.jpeg" alt="header"/>
+    <img class="index-header-image" src="./order.png" alt="header"/>
 </header>
-<section>
-    {#if !user.id}
-         <Information></Information>
-    {:else}
-         <Catalog services={services} user_id={user.id}></Catalog>
-    {/if}
-</section>
 
 <style>
-    :global(body){
-        background-image: none;
-    }
     .index-header {
         position: relative;
         width: 100%;
@@ -98,14 +65,14 @@
         text-align: center;
     }
     .index-header-image {
-        height: 540px;
+        width:100%;
+        height:350px;
         object-fit: cover;
-        width: 1440px;
     }
     .index-header .sign-in-btn {
         position: absolute;
-        top: 35px;
-        right: 200px;
+        top: 25px;
+        right: 50px;
     }
     .header-text {
         position: absolute;
@@ -118,6 +85,8 @@
         font-weight: 400;
         font-size: 60px;
         line-height: 109px;
-        color: #554D76;
+        color: #FFFFFF
     }
 </style>
+
+<!-- markup (zero or more items) goes here -->

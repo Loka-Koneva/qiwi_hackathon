@@ -60,15 +60,15 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ServicesAPIView(ListAPIView):
+class ServicesAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ServicesSerializer
 
     def get(self, request: Request, ) -> Response:
-        user = User.objects.filter(id=request.get('id'))[0]
-        services = Service.objects.filter(company_id=user.company)
+        user = User.objects.filter(id=request.user.id)[0]
+        services = Service.objects.filter(company=user.company)
         serializer = self.serializer_class(services, many=True)
-        return Response({"services": serializer.data})
+        return Response(serializer.data)
 
 
 class ServicesHistoryAPIView(APIView):

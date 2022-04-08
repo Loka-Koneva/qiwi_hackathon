@@ -40,7 +40,7 @@ class Company(UIDMixin):
 
 
 class User(AbstractUser):
-    company = models.ForeignKey("Company", verbose_name="Обслуживающая организация",
+    company = models.ForeignKey(Company, verbose_name="Обслуживающая организация",
                                 on_delete=models.SET_NULL, null=True, blank=True,
                                 db_constraint=False)
 
