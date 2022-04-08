@@ -54,3 +54,11 @@ class LogoutAPIView(APIView):
         serializer.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ServicesAPIView(APIView):
+    pass
+
+
+class ServicesHistoryAPIView(APIView):
+    pass

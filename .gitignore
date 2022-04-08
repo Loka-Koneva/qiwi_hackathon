@@ -59,7 +59,7 @@ target/
 __pycache__/
 local_settings.py
 
-.env
+qiwi_hackathon_frontend/.env
 db.sqlite3
 
 .vscode/
