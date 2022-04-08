@@ -41,7 +41,8 @@ class Company(UIDMixin):
 
 class User(AbstractUser):
     company = models.ForeignKey("Company", verbose_name="Обслуживающая организация",
-                                on_delete=models.SET_NULL, null=True, blank=True)
+                                on_delete=models.SET_NULL, null=True, blank=True,
+                                db_constraint=False)
 
     @property
     def tokens(self):
@@ -51,9 +52,9 @@ class User(AbstractUser):
 
 class ServiceRequest(UIDMixin):
     user = models.ForeignKey("User", verbose_name="Заказчик",
-                             on_delete=models.SET_NULL, null=True)
+                             on_delete=models.SET_NULL, null=True, db_constraint=False)
     service = models.ForeignKey("Service", verbose_name="Услуги",
-                                on_delete=models.SET_NULL, null=True)
+                                on_delete=models.SET_NULL, null=True, db_constraint=False)
     status = models.CharField(choices=STATUS, default=STATUS[0], max_length=150)
     grade = models.IntegerField(verbose_name="Оценка")
     comment = models.CharField(max_length=1024, verbose_name="Отзыв", blank=True, null=True)
