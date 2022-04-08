@@ -61,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer[User]):
     class Meta:
         model = User
         fields = (
+            'uid'
             'email',
             'username',
             'password',
@@ -88,4 +89,7 @@ class LogoutSerializer(serializers.Serializer[User]):
 
 
 class ServicesSerializer(serializers.Serializer[Service]):
-    pass
+
+    class Meta:
+        model = Service
+        fields = ('uid', 'name', 'cost', 'company')

@@ -1,7 +1,6 @@
 from rest_framework.generics import RetrieveUpdateAPIView
-from rest_framework_simplejwt.views import TokenRefreshView
 
-from .models import User
+from .models import User, Service
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -65,9 +64,10 @@ class ServicesAPIView(APIView):
     serializer_class = ServicesSerializer
 
     def get(self, request: Request) -> Response:
-        # articles = Article.objects.all()
-        # serializer = ArticleSerializer(articles, many=True)
-        # return Response({"articles": serializer.data})
+        user = User.objects.filter(uid=request.get('uid'))[0]
+        services = Service.objects.filter(company_id=user.company)
+        serializer = self.serializer_class(services, many=True)
+        return Response({"services": serializer.data})
         pass
 
 
