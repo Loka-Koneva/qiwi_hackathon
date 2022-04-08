@@ -21,7 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer[User]):
 
 class LoginSerializer(serializers.ModelSerializer[User]):
     username = serializers.CharField(max_length=255)
-    password = serializers.CharField(max_length=128)
+    password = serializers.CharField(max_length=128, write_only=True)
 
     tokens = serializers.SerializerMethodField()
 
@@ -33,7 +33,7 @@ class LoginSerializer(serializers.ModelSerializer[User]):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'tokens']
+        fields = ['email', 'username', 'tokens', 'password']
 
     def validate(self, data):  # type: ignore
         """Validate and return user login."""

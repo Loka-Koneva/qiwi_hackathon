@@ -1,13 +1,14 @@
 <script context="module">
-    export async function load(){
-        return {props: {api_url: process.env.BASE_API_URL}}
+    export async function load({session}){
+        return {props: {api_url: process.env.BASE_API_URL }}
     }
 </script>
 <script>
     export let api_url;
     import { goto } from '$app/navigation';
+    import { session } from '$app/stores';
     import { Card, Button, FormField, TextField } from 'attractions'
-    import { browserGet, browserSet } from "../libutils/utils.js"
+    import { browserGet, browserSet } from "../utils/index.js"
     let email = ''
     let password = ''
     let errors = null;
@@ -25,32 +26,34 @@
                 })
             }
         )
-        if(response.status == 201) {
+        if(response.status == 200) {
             let json = await response.json()
-            browserSet('refreshToken', json.user.tokens.refresh)
+            browserSet('refreshToken', json.tokens.refresh)
             await goto('/')
         } else {
+            //TODO: notification about wrong credentials
         }
     }
 </script>
 
-<div class="login-card">
-    <Card>
-        <!-- <form on:submit|preventDefault={submit}> -->
-            <FormField name="e-mail" help="Введите e-mail" required>
-                <TextField type="text" bind:value={email} />
-            </FormField>
-    
-            <FormField name="Пароль" help="Введите пароль" required>
-                <TextField type="password" bind:value={password}/>
-            </FormField>
-            <Button filled on:click={submit} danger>Войти</Button>
-        <!-- </form> -->
-    </Card>    
+<div class="login-container">
+    <div class="login-card">
+        <Card>
+            <!-- <form on:submit|preventDefault={submit}> -->
+                <FormField name="e-mail" help="Введите e-mail" required>
+                    <TextField type="text" bind:value={email} />
+                </FormField>
+        
+                <FormField name="Пароль" help="Введите пароль" required>
+                    <TextField type="password" bind:value={password}/>
+                </FormField>
+                <Button filled on:click={submit} danger>Войти</Button>
+            <!-- </form> -->
+        </Card>    
+    </div>
 </div>
-
 <style>
-    :global(body){
+    .login-container{
         height: 100vh;
         background-image: url('./login-background.jpg');
         background-position: center;

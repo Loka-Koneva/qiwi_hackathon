@@ -1,3 +1,11 @@
+<script context="module">
+    import { getCurrentUser } from "../utils/index.js"
+    export async function load(fetch) {
+        const response = await getCurrentUser(`${process.env.BASE_API_URL}/api/token/refresh/`)
+        return {}
+    }
+</script>
+
 <script>
     import { goto } from "$app/navigation";
     import { Button } from "attractions"
@@ -26,7 +34,9 @@
 </section>
 
 <style>
-    /* your styles go here */
+    :global(body){
+        background-image: none;
+    }
     .index-header {
         position: relative;
         width: 100%;
