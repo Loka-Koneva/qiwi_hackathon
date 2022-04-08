@@ -91,7 +91,7 @@ class LogoutSerializer(serializers.Serializer[User]):
 class ServicesSerializer(serializers.Serializer[Service]):
     uid = serializers.UUIDField(source='uid')
     name = serializers.CharField(source='name')
-    cost = serializers.DecimalField(source='cost')
+    # cost = serializers.DecimalField(source='cost')
     icon = serializers.CharField(source='icon')
 
     class Meta:
