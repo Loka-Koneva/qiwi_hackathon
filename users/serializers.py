@@ -88,11 +88,11 @@ class LogoutSerializer(serializers.Serializer[User]):
             raise exceptions.AuthenticationFailed(ex)
 
 
-class ServicesSerializer(serializers.Serializer[Service]):
-    uid = serializers.UUIDField(source='uid')
-    name = serializers.CharField(source='name')
+class ServicesSerializer(serializers.ModelSerializer):
+    # uid = serializers.UUIDField(source='uid')
+    # name = serializers.CharField(source='name')
     # cost = serializers.DecimalField(source='cost')
-    icon = serializers.CharField(source='icon')
+    # icon = serializers.CharField(source='icon')
 
     class Meta:
         model = Service

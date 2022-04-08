@@ -14,18 +14,12 @@
                     Authorization: `Bearer ${user_response.data.tokens.access}`
                 }
             })
-            let services = [{
-                uid: '9940dbdc-fa90-4ab9-b2c6-0912f5d48b95',
-                name: 'Поверка счетчиков ХВС',
-                cost: 600,
-                icon: 'counter1.svg'
-            }]
-            // let services = []
-            // if(services_response.status == 200) {
-            //     const json = await services_response.json() 
-            //     debugger;
-            //     services = json.services
-            // }
+            let services = []
+            if(services_response.status == 200) {
+                const json = await services_response.json() 
+                debugger;
+                services = json.services
+            }
             return {props: {user: user_response.data, services: services, api_url: api_url}}
         } else {
             return {props: {user: {}, services: [], api_url: api_url}}

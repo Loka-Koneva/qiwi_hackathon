@@ -40,7 +40,7 @@
     <div class="login-card">
         <Card>
             <!-- <form on:submit|preventDefault={submit}> -->
-                <FormField name="e-mail" help="Введите e-mail" required>
+                <FormField name="username" help="Введите имя" required>
                     <TextField type="text" bind:value={email} />
                 </FormField>
         
