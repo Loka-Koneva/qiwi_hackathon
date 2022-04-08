@@ -7,8 +7,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 STATUS = [
-    ("0", "0"),
-    ("1", "1")
+    ("new", "Принята"),
+    ("in_work", "В работе"),
+    ('done', 'Выполнена')
 ]
 
 
