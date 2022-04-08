@@ -5,20 +5,40 @@
         const api_url = process.env.BASE_API_URL
         const user_response = await getCurrentUser(`${api_url}/api/token/refresh/`, `${api_url}/api/user/`)
         if(!user_response.error && user_response.data.id) {
-            return {props: {user: user_response.data}}
+            return {props: {user: user_response.data, api_url: api_url}}
         } else {
-            return {props: {user: {}}}
+            return {props: {user: {}, api_url: api_url}}
         }
         
     }
 </script>
 
 <script>
-    export let user;
+    export let user, api_url;
     import { Button } from "attractions"
     import Information from "../components/Information.svelte"
+    import { browserGet } from "../utils/index.js";
     function login() {
         goto('/login');
+    }
+    async function logout() {
+        const response = await fetch(`${api_url}/api/logout/`, {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.tokens.access}`
+            },
+            body: JSON.stringify({
+                refresh: browserGet('refreshToken')
+            })
+        })
+        if(response.status == 204) {
+            localStorage.removeItem('refreshToken');
+            user = {}
+            location.reload()
+        }
     }
 </script>
 
@@ -32,7 +52,7 @@
         </div>
     {:else}
         <div class="sign-in-btn">
-            <Button filled on:click={logout}>Выйти</Button>
+            <Button danger filled on:click={logout}>Выйти</Button>
         </div>
     {/if}
     <img class="index-header-image" src="./index.jpeg" alt="header"/>
