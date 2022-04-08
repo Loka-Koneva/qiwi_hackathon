@@ -1,12 +1,5 @@
-# from django.contrib.auth.forms import AuthenticationForm
-# from django.contrib.auth.views import LoginView
-# from django.shortcuts import render
-#
-#
-# class LoginUser(LoginView):
-#     # form_class = AuthenticationForm
-#     # template_name = "qiwi_hackathon_frontend/login.html"
-#     template_name = '/home/loka/Documents/GitHub/hackathon/qiwi_hackathon/rest_framework/registration/login.html'
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from .models import User
 from rest_framework import status
@@ -18,13 +11,14 @@ from rest_framework.views import APIView
 from .serializers import (
     LoginSerializer,
     LogoutSerializer,
+    ServicesSerializer,
+    UserSerializer,
 )
 
 
 class LoginAPIView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
-    template_name = '/home/loka/Documents/GitHub/hackathon/qiwi_hackathon/rest_framework/registration/login.html'
 
     def post(self, request: Request) -> Response:
         """Return user after login."""
@@ -56,9 +50,31 @@ class LogoutAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+        """Return user on GET request."""
+        serializer = self.serializer_class(request.user, context={'request': request})
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class ServicesAPIView(APIView):
-    pass
+    serializer_class = ServicesSerializer
+
+    def get(self, request: Request) -> Response:
+        # articles = Article.objects.all()
+        # serializer = ArticleSerializer(articles, many=True)
+        # return Response({"articles": serializer.data})
+        pass
 
 
 class ServicesHistoryAPIView(APIView):
-    pass
+    def get(self, request: Request) -> Response:
+        # articles = Article.objects.all()
+        # serializer = ArticleSerializer(articles, many=True)
+        # return Response({"articles": serializer.data})
+        pass
+

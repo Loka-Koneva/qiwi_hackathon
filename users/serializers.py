@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import exceptions, serializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
-from .models import User
+from .models import User, Service
 
 
 class RegistrationSerializer(serializers.ModelSerializer[User]):
@@ -20,7 +20,6 @@ class RegistrationSerializer(serializers.ModelSerializer[User]):
 
 
 class LoginSerializer(serializers.ModelSerializer[User]):
-    # email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128)
 
@@ -34,7 +33,7 @@ class LoginSerializer(serializers.ModelSerializer[User]):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'tokens']
+        fields = ['email', 'username', 'tokens']
 
     def validate(self, data):  # type: ignore
         """Validate and return user login."""
@@ -54,6 +53,22 @@ class LoginSerializer(serializers.ModelSerializer[User]):
         return user
 
 
+class UserSerializer(serializers.ModelSerializer[User]):
+    """Handle serialization and deserialization of User objects."""
+
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'username',
+            'password',
+            'tokens',
+        )
+        read_only_fields = ('tokens',)
+
+
 class LogoutSerializer(serializers.Serializer[User]):
     refresh = serializers.CharField()
 
@@ -70,3 +85,7 @@ class LogoutSerializer(serializers.Serializer[User]):
 
         except TokenError as ex:
             raise exceptions.AuthenticationFailed(ex)
+
+
+class ServicesSerializer(serializers.Serializer[Service]):
+    pass
