@@ -92,7 +92,7 @@ class ServicesSerializer(serializers.Serializer[Service]):
 
     class Meta:
         model = Service
-        fields = ('uid', 'name', 'cost', 'company')
+        fields = ('uid', 'name', 'cost')
 
 
 class HistoryServicesSerializer(serializers.Serializer[ServiceRequest]):

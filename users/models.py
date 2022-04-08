@@ -49,8 +49,8 @@ class User(AbstractUser):
 
 
 class ServiceRequest(UIDMixin):
-    user = models.OneToOneField("User", verbose_name="Заказчик",
-                                on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey("User", verbose_name="Заказчик",
+                             on_delete=models.SET_NULL, null=True)
     service = models.ForeignKey("Service", verbose_name="Услуги",
                                 on_delete=models.SET_NULL, null=True)
     status = models.CharField(choices=STATUS, default=STATUS[0], max_length=150)
