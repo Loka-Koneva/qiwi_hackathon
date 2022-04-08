@@ -14,8 +14,9 @@
 </script>
 
 <script>
-    // import { goto } from "$app/navigation";
+    export let user;
     import { Button } from "attractions"
+    import Information from "../components/Information.svelte"
     function login() {
         goto('/login');
     }
@@ -25,13 +26,23 @@
 
 <header class="index-header">
     <h1 class="header-text">Платные услуги</h1>
-    <div class="sign-in-btn">
-        <Button filled on:click={login}>Войти</Button>
-    </div>
+    {#if !user.id}
+        <div class="sign-in-btn">
+            <Button filled on:click={login}>Войти</Button>
+        </div>
+    {:else}
+        <div class="sign-in-btn">
+            <Button filled on:click={logout}>Выйти</Button>
+        </div>
+    {/if}
     <img class="index-header-image" src="./index.jpeg" alt="header"/>
 </header>
 <section>
-    <h1 class="how-it-works-header">Как это работает?</h1>
+    {#if !user.id}
+         <Information></Information>
+    {:else}
+         <span>wow</span>
+    {/if}
 </section>
 
 <style>
@@ -66,17 +77,5 @@
         font-size: 60px;
         line-height: 109px;
         color: #554D76;
-    }
-    .how-it-works-header {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 75px;
-        line-height: 116px;
-        color: #845EC2;
-        position: absolute;
-        margin-left: 30%;
-        margin-right: 30%;
-        margin-top: auto;
     }
 </style>
