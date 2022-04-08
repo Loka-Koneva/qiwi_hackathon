@@ -1,14 +1,22 @@
 <script context="module">
     import { getCurrentUser } from "../utils/index.js"
-    export async function load(fetch) {
-        const response = await getCurrentUser(`${process.env.BASE_API_URL}/api/token/refresh/`)
-        return {}
+    import { goto } from "$app/navigation";
+    export async function load() {
+        const api_url = process.env.BASE_API_URL
+        const user_response = await getCurrentUser(`${api_url}/api/token/refresh/`, `${api_url}/api/user/`)
+        if(!user_response.error && user_response.data.id) {
+            return {props: {user: user_response.data}}
+        } else {
+            return {props: {user: {}}}
+        }
+        
     }
 </script>
 
 <script>
-    import { goto } from "$app/navigation";
+    export let user;
     import { Button } from "attractions"
+    import Information from "../components/Information.svelte"
     function login() {
         goto('/login');
     }
@@ -18,19 +26,23 @@
 
 <header class="index-header">
     <h1 class="header-text">Платные услуги</h1>
-    <div class="sign-in-btn">
-        <Button filled on:click={login}>Войти</Button>
-    </div>
-    <div class="sign-up-btn">
-        <Button filled danger>Регистрация</Button>
-    </div>
-    <div class="order-btn">
-        <Button filled danger>Заказать</Button>
-    </div>
+    {#if !user.id}
+        <div class="sign-in-btn">
+            <Button filled on:click={login}>Войти</Button>
+        </div>
+    {:else}
+        <div class="sign-in-btn">
+            <Button filled on:click={logout}>Выйти</Button>
+        </div>
+    {/if}
     <img class="index-header-image" src="./index.jpeg" alt="header"/>
 </header>
 <section>
-    <h1 class="how-it-works-header">Как это работает?</h1>
+    {#if !user.id}
+         <Information></Information>
+    {:else}
+         <span>wow</span>
+    {/if}
 </section>
 
 <style>
@@ -48,22 +60,10 @@
         object-fit: cover;
         width: 1440px;
     }
-    .index-header .order-btn {
-        position: absolute;
-        width: 280px;
-        height: 67px;
-        top: 444px;
-        left: 137px;
-    }
     .index-header .sign-in-btn {
         position: absolute;
         top: 35px;
         right: 200px;
-    }
-    .index-header .sign-up-btn {
-        position: absolute;
-        top: 35px;
-        right: 50px;
     }
     .header-text {
         position: absolute;
@@ -77,17 +77,5 @@
         font-size: 60px;
         line-height: 109px;
         color: #554D76;
-    }
-    .how-it-works-header {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 75px;
-        line-height: 116px;
-        color: #845EC2;
-        position: absolute;
-        margin-left: 30%;
-        margin-right: 30%;
-        margin-top: auto;
     }
 </style>
