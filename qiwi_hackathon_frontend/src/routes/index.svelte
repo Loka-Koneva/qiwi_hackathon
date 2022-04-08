@@ -1,13 +1,20 @@
 <script context="module">
     import { getCurrentUser } from "../utils/index.js"
-    export async function load(fetch) {
-        const response = await getCurrentUser(`${process.env.BASE_API_URL}/api/token/refresh/`)
-        return {}
+    import { goto } from "$app/navigation";
+    export async function load() {
+        const api_url = process.env.BASE_API_URL
+        const user_response = await getCurrentUser(`${api_url}/api/token/refresh/`, `${api_url}/api/user/`)
+        if(!user_response.error && user_response.data.id) {
+            return {props: {user: user_response.data}}
+        } else {
+            return {props: {user: {}}}
+        }
+        
     }
 </script>
 
 <script>
-    import { goto } from "$app/navigation";
+    // import { goto } from "$app/navigation";
     import { Button } from "attractions"
     function login() {
         goto('/login');
@@ -20,12 +27,6 @@
     <h1 class="header-text">Платные услуги</h1>
     <div class="sign-in-btn">
         <Button filled on:click={login}>Войти</Button>
-    </div>
-    <div class="sign-up-btn">
-        <Button filled danger>Регистрация</Button>
-    </div>
-    <div class="order-btn">
-        <Button filled danger>Заказать</Button>
     </div>
     <img class="index-header-image" src="./index.jpeg" alt="header"/>
 </header>
@@ -48,22 +49,10 @@
         object-fit: cover;
         width: 1440px;
     }
-    .index-header .order-btn {
-        position: absolute;
-        width: 280px;
-        height: 67px;
-        top: 444px;
-        left: 137px;
-    }
     .index-header .sign-in-btn {
         position: absolute;
         top: 35px;
         right: 200px;
-    }
-    .index-header .sign-up-btn {
-        position: absolute;
-        top: 35px;
-        right: 50px;
     }
     .header-text {
         position: absolute;
