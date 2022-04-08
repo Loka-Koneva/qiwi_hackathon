@@ -65,7 +65,7 @@ class ServicesAPIView(APIView):
     serializer_class = ServicesSerializer
 
     def get(self, request: Request, ) -> Response:
-        user = User.objects.filter(uid=request.get('uid'))[0]
+        user = User.objects.filter(id=request.get('id'))[0]
         services = Service.objects.filter(company_id=user.company)
         serializer = self.serializer_class(services, many=True)
         return Response({"services": serializer.data})
